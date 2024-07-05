@@ -4,8 +4,10 @@ import com.aluraliteratura.aluraliteratura.interfaces.IConvert;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Convert implements IConvert {
+
+public class Converter implements IConvert {
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public <T> T convert(String json, Class<T> tClass) {
         try {
@@ -14,4 +16,5 @@ public class Convert implements IConvert {
             throw new RuntimeException(e);
         }
     }
+
 }
