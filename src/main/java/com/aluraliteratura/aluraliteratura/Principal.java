@@ -1,6 +1,7 @@
 package com.aluraliteratura.aluraliteratura;
 
-import com.aluraliteratura.aluraliteratura.http.HttpBooks;
+import com.aluraliteratura.aluraliteratura.service.BooksService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Scanner;
@@ -8,7 +9,9 @@ import java.util.Scanner;
 @Service
 public class Principal {
     private final Scanner scanner = new Scanner(System.in);
-    private final HttpBooks httpBooks = new HttpBooks();
+
+    @Autowired
+    private BooksService booksService;
 
     public void mostrarMenu() {
         String menu = """
@@ -42,6 +45,6 @@ public class Principal {
     private void buscarLibros() {
         System.out.println("Nombre del libro: ");
         String name = scanner.nextLine();
-        httpBooks.getBook(name);
+        booksService.getBook(name);
     }
 }

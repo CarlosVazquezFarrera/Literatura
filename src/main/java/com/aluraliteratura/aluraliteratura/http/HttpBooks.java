@@ -1,8 +1,11 @@
 package com.aluraliteratura.aluraliteratura.http;
 
+import com.aluraliteratura.aluraliteratura.data.BookData;
 import com.aluraliteratura.aluraliteratura.data.ResponseBook;
 import com.aluraliteratura.aluraliteratura.utils.Converter;
+import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 
 public class HttpBooks extends HttpGutendex {
@@ -14,9 +17,10 @@ public class HttpBooks extends HttpGutendex {
     }
 
 
-    public ResponseBook getBook(String name) {
+    public Optional<BookData> getBook(String name) {
         name = name.trim().replace(' ', '+');
         String json = http.obtenerDatos(url + "?search=" + name);
-        return converter.convert(json, ResponseBook.class);
+        ResponseBook responseBook = converter.convert(json, ResponseBook.class);
+        return  responseBook.results().stream().findFirst();
     }
 }
