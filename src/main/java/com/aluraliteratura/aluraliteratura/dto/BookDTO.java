@@ -3,12 +3,22 @@ package com.aluraliteratura.aluraliteratura.dto;
 import com.aluraliteratura.aluraliteratura.enums.Languages;
 import com.aluraliteratura.aluraliteratura.model.Author;
 
-import java.util.List;
-import java.util.Set;
-
 public record BookDTO(
         Long id,
         String title,
-        Set<Languages> languages,
-        List<Author> authors)
-{}
+        Languages language,
+        Author author,
+        int downloadCount)
+{
+    @Override
+    public String toString() {
+        return """
+              -----------------LIBRO--------------------'
+              Titulo: %s 
+              Autor(s): %s
+              Idioma: %s
+              Numero de descargas: %s
+              ------------------------------------------
+              """.formatted(title(), author().getName(), language(), downloadCount());
+    }
+}

@@ -2,27 +2,20 @@ package com.aluraliteratura.aluraliteratura.model;
 
 
 import com.aluraliteratura.aluraliteratura.data.BookData;
+import com.aluraliteratura.aluraliteratura.dto.BookDTO;
 import com.aluraliteratura.aluraliteratura.enums.Languages;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "books")
 public class Book {
     public Book(BookData bookData) {
         this.title = bookData.title();
-        this.languages = new HashSet<>();
-        for (String lang : bookData.languages()) {
-            try{
-                this.languages.add(Languages.fromAbreviaturaToLanguage(lang));
-            }
-            catch (Exception ignored) {
-            }
-
+        this.downloadCount = bookData.downloadCount();
+        if (!bookData.languages().isEmpty()) {
+            this.language = Languages.fromAbreviaturaToLanguage(bookData.languages().getFirst());
         }
 
     }
@@ -30,26 +23,45 @@ public class Book {
     public Book() {
     }
 
-    @jakarta.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="Id")
     private Long id;
     @Column(unique = true)
     private String title;
-    @ElementCollection
     @Enumerated(EnumType.STRING)
-    private Set<Languages> languages;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "book_author",
-            joinColumns = { @JoinColumn(name = "book_id") },
-            inverseJoinColumns = { @JoinColumn(name = "author_id") }
-    )
-    private List<Author> authors;
+    private Languages language;
 
-    public void addAuthor(Author author){
-        if(this.authors == null){
-            this.authors = new ArrayList<>();
-        }
-        this.authors.add(author);
+    @ManyToOne
+    private Author author;
+
+    private int downloadCount;
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Languages getLanguage() {
+        return language;
+    }
+
+    public int getDownloadCount() {
+        return downloadCount;
+    }
+
+    public void setAuthors(Author author) {
+        this.author = author;
+    }
+
+    public BookDTO toDTO() {
+        return new BookDTO(getId(), getTitle(), getLanguage(), getAuthor(), getDownloadCount());
     }
 }

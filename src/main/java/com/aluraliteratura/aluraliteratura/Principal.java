@@ -1,5 +1,6 @@
 package com.aluraliteratura.aluraliteratura;
 
+import com.aluraliteratura.aluraliteratura.service.AuthorService;
 import com.aluraliteratura.aluraliteratura.service.BooksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ public class Principal {
 
     @Autowired
     private BooksService booksService;
+    @Autowired
+    private AuthorService authorService;
 
     public void mostrarMenu() {
         String menu = """
@@ -33,6 +36,13 @@ public class Principal {
                 case 1:
                     buscarLibros();
                     break;
+                case 2:
+                    mostrarLibrosGuardados();
+                    break;
+                case 3:
+                    mostrarAutoresGuardados();
+                    break;
+
             }
 
 
@@ -45,6 +55,18 @@ public class Principal {
     private void buscarLibros() {
         System.out.println("Nombre del libro: ");
         String name = scanner.nextLine();
-        booksService.getBook(name);
+        var book = booksService.getBook(name);
+        if(book.isEmpty()) return;
+        System.out.println(book.get());
+
+
+    }
+
+    private void  mostrarAutoresGuardados() {
+        authorService.listrarAutoresRegistrados().forEach(System.out::println);
+    }
+
+    private void mostrarLibrosGuardados() {
+        booksService.mostrarLibrosGuardados().forEach(System.out::println);
     }
 }

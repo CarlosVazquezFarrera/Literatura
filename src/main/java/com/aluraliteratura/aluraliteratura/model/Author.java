@@ -2,7 +2,6 @@ package com.aluraliteratura.aluraliteratura.model;
 
 import com.aluraliteratura.aluraliteratura.data.AuthorData;
 import com.aluraliteratura.aluraliteratura.dto.AuthorDTO;
-import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,13 +10,13 @@ import java.util.List;
 @Table(name = "authors")
 public class Author {
     @Id
-    @Column(name="ID")
+    @Column(name="Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     int birthYear;
     int deathYear;
-    @ManyToMany(mappedBy = "authors")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Book> books;
 
     public Author(AuthorData a) {
@@ -33,4 +32,35 @@ public class Author {
 
     public Author() {
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public int getDeathYear() {
+        return deathYear;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        books.forEach(e -> e.setAuthors(this));
+        this.books = books;
+    }
+
+    public AuthorDTO toDTO() {
+        return new AuthorDTO(getId(), getName(), getBirthYear(), getDeathYear(), getBooks().stream().map(Book::toDTO).toList());
+    }
+
+
 }
