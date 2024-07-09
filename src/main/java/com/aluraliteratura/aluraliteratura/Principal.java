@@ -1,5 +1,6 @@
 package com.aluraliteratura.aluraliteratura;
 
+import com.aluraliteratura.aluraliteratura.enums.Languages;
 import com.aluraliteratura.aluraliteratura.service.AuthorService;
 import com.aluraliteratura.aluraliteratura.service.BooksService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,12 @@ public class Principal {
                 case 3:
                     mostrarAutoresGuardados();
                     break;
-
+                case 4:
+                    mostrarAutoresPorFechaDeNacimiento();
+                    break;
+                case 5:
+                    mostrarLibrosPorCategoria();
+                    break;
             }
 
 
@@ -51,6 +57,13 @@ public class Principal {
         System.out.println("Fin");
     }
 
+    private void mostrarAutoresPorFechaDeNacimiento() {
+        System.out.println("Año de nacimiento: ");
+        int year = scanner.nextInt();
+        scanner.nextLine();
+        authorService.listrarAutoresPorFechaDeNacimiento(year).forEach(System.out::println);
+
+    }
 
     private void buscarLibros() {
         System.out.println("Nombre del libro: ");
@@ -58,8 +71,6 @@ public class Principal {
         var book = booksService.getBook(name);
         if(book.isEmpty()) return;
         System.out.println(book.get());
-
-
     }
 
     private void  mostrarAutoresGuardados() {
@@ -69,4 +80,16 @@ public class Principal {
     private void mostrarLibrosGuardados() {
         booksService.mostrarLibrosGuardados().forEach(System.out::println);
     }
+
+    private void mostrarLibrosPorCategoria() {
+        for (Languages language: Languages.values()){
+            System.out.println(language);
+        }
+        System.out.println("Selecciona un idioma");
+        String abreviatura = scanner.nextLine();
+        Languages language = Languages.fromAbreviaturaToLanguage(abreviatura);
+        booksService.mostrarLibrosPorCategoria(language).forEach(System.out::println);
+    }
+
+
 }

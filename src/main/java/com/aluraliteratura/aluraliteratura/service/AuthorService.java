@@ -17,4 +17,8 @@ public class AuthorService {
         return authorRepository.findAll().stream().map(Author::toDTO).toList();
     }
 
+    public List<AuthorDTO> listrarAutoresPorFechaDeNacimiento(int year) {
+        return authorRepository.findByBirthYearGreaterThanEqual(year).stream().map(Author::toDTO).toList();
+    }
+
 }

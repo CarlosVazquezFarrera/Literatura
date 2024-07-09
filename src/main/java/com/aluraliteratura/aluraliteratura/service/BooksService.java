@@ -3,6 +3,7 @@ package com.aluraliteratura.aluraliteratura.service;
 import com.aluraliteratura.aluraliteratura.data.AuthorData;
 import com.aluraliteratura.aluraliteratura.data.BookData;
 import com.aluraliteratura.aluraliteratura.dto.BookDTO;
+import com.aluraliteratura.aluraliteratura.enums.Languages;
 import com.aluraliteratura.aluraliteratura.http.HttpBooks;
 import com.aluraliteratura.aluraliteratura.model.Author;
 import com.aluraliteratura.aluraliteratura.model.Book;
@@ -59,5 +60,9 @@ public class BooksService {
 
     public List<BookDTO> mostrarLibrosGuardados() {
         return repository.findAll().stream().map(Book::toDTO).toList();
+    }
+
+    public List<BookDTO> mostrarLibrosPorCategoria(Languages language) {
+        return repository.findByLanguage(language).stream().map(Book::toDTO).toList();
     }
 }

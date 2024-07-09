@@ -31,4 +31,8 @@ public enum Languages {
     }
 
 
+    @Override
+    public String toString() {
+        return abreviatura + " - " + texto;
+    }
 }
